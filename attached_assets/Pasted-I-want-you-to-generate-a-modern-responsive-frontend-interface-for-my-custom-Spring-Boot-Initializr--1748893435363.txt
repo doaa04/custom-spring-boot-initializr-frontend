@@ -1,0 +1,241 @@
+I want you to generate a modern, responsive frontend interface for my custom Spring Boot Initializr. This UI allows developers to generate Spring Boot projects dynamically by choosing entities, dependencies, and configurations.
+
+⚠️ You are only responsible for frontend. The backend API already exists and accepts structured JSON. The UI must gather all required inputs and send them in JSON format via a POST /generate request.
+
+✅ Use plain HTML, JavaScript and React (no Tailwind) modern UI.
+
+🖥 General Layout (Multi-step or Tabbed Form)
+Project Metadata
+
+Entities Designer
+
+Database Configuration
+
+Dependency Selector
+
+Generate Button + Download Link
+
+1. 🏗 Project Metadata Section
+Inputs to include:
+
+Project Name – input text
+
+Base Package – input text (e.g., com.example.demo)
+
+Java Version – dropdown (8, 11, 17, 21)
+
+Build Tool – dropdown (Maven, Gradle)
+
+GroupId – text input
+
+ArtifactId – text input
+
+Version – text input (default: 0.0.1-SNAPSHOT)
+
+Description – textarea
+
+Checkbox: Include Docker Support
+
+Checkbox: Include Swagger/OpenAPI
+
+Checkbox: Include GitLab CI
+
+2. 🧱 Entities Designer
+Allow the user to define multiple entities and their fields.
+
+➕ Button to "Add New Entity"
+
+Each entity form includes:
+
+Entity Name (text input)
+
+Field List:
+
+Field Name (text input)
+
+Field Type (dropdown: String, int, Long, boolean, Date, etc.)
+
+Button ➖ Remove Field
+
+Button ➕ Add Field
+
+Store the result as json:
+
+{
+  "entities": [
+    {
+      "name": "User",
+      "fields": [
+        {"name": "id", "type": "Long"},
+        {"name": "email", "type": "String"}
+      ]
+    }
+  ]
+}
+3. 🛢 Database Configuration
+Let users choose a database type and provide connection details.
+
+Database Type (dropdown):
+
+H2, MySQL, PostgreSQL, Oracle, SQL Server, MariaDB
+
+JDBC URL (text input)
+
+Username (text input)
+
+Password (password input)
+
+Example output json:
+
+{
+  "database": {
+    "type": "H2",
+    "url": "jdbc:h2:mem:testdb",
+    "username": "sa",
+    "password": "password"
+  }
+}
+4. 📦 Dependency Selector
+Use a multi-select tree-like UI. Categories are expandable. Each dependency is selectable by checkbox.
+
+Show dependencies organized by category:
+
+Developer Tools
+ GraalVM Native Support (native)
+
+ GraphQL DGS Code Generation (dgs-codegen)
+
+ Spring Boot DevTools (devtools)
+
+ Lombok (lombok)
+
+ Spring Configuration Processor (configuration-processor)
+
+ Docker Compose Support (docker-compose)
+
+ Spring Modulith (modulith)
+
+Web
+ Spring Web (web)
+
+ Spring Reactive Web (webflux)
+
+ Spring for GraphQL (graphql)
+
+ Rest Repositories (data-rest)
+
+ Spring Session (session)
+
+ Rest Repositories HAL Explorer (data-rest-explorer)
+
+ Spring HATEOAS (hateoas)
+
+ Spring Web Services (web-services)
+
+ Jersey (jersey)
+
+ Vaadin (vaadin)
+
+ Netflix DGS (netflix-dgs)
+
+ htmx (htmx)
+
+Template Engines
+ Thymeleaf (thymeleaf)
+
+ Apache Freemarker (freemarker)
+
+ Mustache (mustache)
+
+ Groovy Templates (groovy-templates)
+
+ JTE (jte)
+
+Security
+ Spring Security (security)
+
+ OAuth2 Client (oauth2-client)
+
+ OAuth2 Authorization Server (oauth2-authorization-server)
+
+ OAuth2 Resource Server (oauth2-resource-server)
+
+ Spring LDAP (data-ldap)
+
+ Okta (okta)
+
+SQL
+ JDBC API (jdbc)
+
+ Spring Data JPA (data-jpa)
+
+ Spring Data JDBC (data-jdbc)
+
+ Spring Data R2DBC (data-r2dbc)
+
+ MyBatis Framework (mybatis)
+
+ Liquibase Migration (liquibase)
+
+ Flyway Migration (flyway)
+
+ JOOQ Access Layer (jooq)
+
+ IBM DB2 Driver (db2)
+
+ Apache Derby Database (derby)
+
+ H2 Database (h2)
+
+ HyperSQL Database (hsql)
+
+ MariaDB Driver (mariadb)
+
+ MS SQL Server Driver (sqlserver)
+
+ MySQL Driver (mysql)
+
+ Oracle Driver (oracle)
+
+ PostgreSQL Driver (postgresql)
+
+NoSQL
+(… include all NoSQL entries as shown in original list …)
+
+Messaging
+(… include all Messaging dependencies …)
+
+I/O, Ops, Observability, Testing, Spring Cloud, AI, Azure, Google Cloud, etc.
+➡ Include full list exactly as provided.
+
+Output structure json:
+{
+  "dependencies": ["web", "data-jpa", "lombok", "h2"]
+}
+5. 🚀 Generate Button
+Clicking “Generate Project” sends POST to /generate-project
+
+Show a spinner or loading state
+
+When response is ready:
+
+Display a download button (e.g., "Download .zip")
+
+🧾 JSON to POST
+Send this to the backend json:
+{
+  "projectName": "my-api",
+  "packageName": "com.example.myapi",
+  "javaVersion": "17",
+  "buildTool": "maven",
+  "database": {
+    "type": "H2",
+    "url": "jdbc:h2:mem:testdb",
+    "username": "sa",
+    "password": "password"
+  },
+  "dependencies": ["web", "data-jpa", "lombok"],
+  "entities": [ ... ],
+  "includeDocker": true,
+  "includeSwagger": true
+}

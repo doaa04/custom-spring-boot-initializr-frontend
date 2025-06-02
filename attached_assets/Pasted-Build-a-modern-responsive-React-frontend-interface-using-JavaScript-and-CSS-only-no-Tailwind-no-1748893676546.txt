@@ -1,0 +1,176 @@
+Build a modern, responsive React frontend interface using JavaScript and CSS only (❌ no Tailwind, no CSS framework).
+
+The purpose is to simulate a Spring Project Configurator.
+You do not need to implement any backend or API — just design the UI and store the data in React state.
+
+⚠️ Do not include any Spring Boot code or API logic.
+✅ This is frontend-only. The result is a multi-step form where the user fills in details, and the final step shows the generated JSON.
+
+🎯 The frontend app must contain 5 clear steps:
+1. 🏗 Project Metadata Section
+Form inputs:
+
+Project Name (text input)
+
+Base Package (text input) – e.g., com.example.demo
+
+Java Version (dropdown) – values: 8, 11, 17, 21
+
+Build Tool (dropdown) – values: Maven, Gradle
+
+GroupId (text input)
+
+ArtifactId (text input)
+
+Version (text input, default: 0.0.1-SNAPSHOT)
+
+Description (textarea)
+
+Checkboxes:
+
+ Include Docker Support
+
+ Include Swagger/OpenAPI
+
+ Include GitLab CI
+
+2. 🧱 Entities Designer
+Let the user add multiple entities with fields. Each entity includes:
+
+Entity Name (text input)
+
+➕ Add Field
+
+Each field includes:
+
+Field Name (text input)
+
+Field Type (dropdown) – values like String, int, Long, boolean, Date, etc.
+
+➖ Remove Field button
+
+➖ Remove Entity button
+
+Store in state as:
+
+json
+Copier
+Modifier
+{
+  "entities": [
+    {
+      "name": "User",
+      "fields": [
+        {"name": "id", "type": "Long"},
+        {"name": "email", "type": "String"}
+      ]
+    }
+  ]
+}
+3. 🛢 Database Configuration
+Let users configure database details.
+
+Database Type (dropdown):
+
+H2, MySQL, PostgreSQL, Oracle, SQL Server, MariaDB
+
+JDBC URL (text input)
+
+Username (text input)
+
+Password (password input)
+
+Save in JSON like:
+
+json
+Copier
+Modifier
+{
+  "database": {
+    "type": "H2",
+    "url": "jdbc:h2:mem:testdb",
+    "username": "sa",
+    "password": "password"
+  }
+}
+4. 📦 Dependency Selector
+Simulate a collapsible multi-category checkbox list. Each category contains multiple dependencies.
+
+Each dependency is:
+
+A checkbox
+
+A label (with name and ID in parentheses)
+
+✅ Group them as expandable categories, e.g.:
+
+Developer Tools
+ GraalVM Native Support (native)
+
+ Spring Boot DevTools (devtools)
+
+ Lombok (lombok)
+...
+
+Web
+ Spring Web (web)
+
+ Spring Reactive Web (webflux)
+...
+
+(💡 include all categories and dependencies exactly as listed)
+
+Store selected IDs in:
+
+json
+Copier
+Modifier
+{
+  "dependencies": ["web", "data-jpa", "lombok", "h2"]
+}
+5. 🚀 Generate Button & Final JSON Preview
+“Generate Project” button
+
+Show a fake loading state (e.g., spinner for 2s)
+
+Then display final generated JSON in a styled code block
+
+Add a fake “Download Project (.zip)” button (it does nothing, just for UI)
+
+🧾 Final Output JSON Format (example)
+json
+Copier
+Modifier
+{
+  "projectName": "my-api",
+  "packageName": "com.example.myapi",
+  "javaVersion": "17",
+  "buildTool": "maven",
+  "groupId": "com.example",
+  "artifactId": "my-api",
+  "version": "0.0.1-SNAPSHOT",
+  "description": "A demo project",
+  "database": {
+    "type": "H2",
+    "url": "jdbc:h2:mem:testdb",
+    "username": "sa",
+    "password": "password"
+  },
+  "dependencies": ["web", "data-jpa", "lombok"],
+  "entities": [
+    {
+      "name": "User",
+      "fields": [
+        {"name": "id", "type": "Long"},
+        {"name": "email", "type": "String"}
+      ]
+    }
+  ],
+  "includeDocker": true,
+  "includeSwagger": true,
+  "includeGitlabCI": false
+}
+🖌 UI Guidelines
+No Tailwind or Bootstrap
+
+Use React + CSS only
