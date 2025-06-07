@@ -15,7 +15,6 @@ export default function ProjectMetadata({ projectData, setProjectData }: Project
 
   return (
     <div>
-      <h2 className="mb-3">Project Metadata</h2>
       <div className="form-row">
         <div className="form-group">
           <label>Project Name</label>
@@ -94,23 +93,12 @@ export default function ProjectMetadata({ projectData, setProjectData }: Project
       </div>
 
       <div className="form-group">
-        <label>Version</label>
+        <label>Sprint Boot Version</label>
         <input
           type="text"
           className="form-control"
           value={projectData.version}
           onChange={(e) => updateData("version", e.target.value)}
-        />
-      </div>
-
-      <div className="form-group">
-        <label>Description</label>
-        <textarea
-          className="form-control"
-          rows={3}
-          value={projectData.description}
-          onChange={(e) => updateData("description", e.target.value)}
-          placeholder="Demo project for Spring Boot"
         />
       </div>
 
@@ -143,6 +131,40 @@ export default function ProjectMetadata({ projectData, setProjectData }: Project
         />
         <label htmlFor="gitlab">Include GitLab CI</label>
       </div>
+
+      <div className="checkbox-group">
+        <input
+          type="checkbox"
+          id="git"
+          checked={projectData.includeGit}
+          onChange={(e) => updateData("includeGit", e.target.checked)}
+        />
+        <label htmlFor="git">Include Git</label>
+      </div>
+
+      {projectData.includeGit && (
+        <div className="form-group">
+          <label>Git Repository URL</label>
+          <input
+            type="text"
+            className="form-control"
+            value={projectData.gitUrl || ""}
+            onChange={(e) => updateData("gitUrl", e.target.value)}
+            placeholder="https://github.com/username/repo.git"
+          />
+        </div>
+      )}
+
+      <div className="checkbox-group">
+        <input
+          type="checkbox"
+          id="tests"
+          checked={projectData.includeTests}
+          onChange={(e) => updateData("includeTests", e.target.checked)}
+        />
+        <label htmlFor="tests">Include Tests</label>
+      </div>
     </div>
+
   );
 }

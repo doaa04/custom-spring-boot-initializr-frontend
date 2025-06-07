@@ -19,6 +19,10 @@ export interface ProjectData {
   includeDocker: boolean;
   includeSwagger: boolean;
   includeGitlabCI: boolean;
+  includeAI: boolean;
+  includeGit: boolean;
+  includeTests: boolean;
+  gitUrl?: string
 }
 
 export interface Entity {
@@ -47,17 +51,20 @@ export default function SpringConfigurator() {
 
   // Project metadata state
   const [projectData, setProjectData] = useState<ProjectData>({
-    projectName: "",
+    projectName: "my-spring-app",
     packageName: "com.example.demo",
     javaVersion: "17",
     buildTool: "Maven",
     groupId: "com.example",
-    artifactId: "",
-    version: "0.0.1-SNAPSHOT",
+    artifactId: "demo",
+    version: "3.1.5",
     description: "",
     includeDocker: false,
     includeSwagger: false,
     includeGitlabCI: false,
+    includeAI: false,
+    includeGit: false,
+    includeTests: false
   });
 
   // Entities state
@@ -97,29 +104,54 @@ export default function SpringConfigurator() {
   const generateProject = async () => {
     setIsGenerating(true);
 
+    const cleanedEntities = entities.map((entity) => {
+      const cleanedFields = entity.fields
+        .filter((f) => f.name.trim() !== "")
+        .map((f) => ({
+          name: f.name,
+          type: f.type,
+          isId: f.name.toLowerCase() === "id", // or your own logic
+        }));
+    
+      const idField = cleanedFields.find((f) => f.isId) || {
+        name: "id",
+        type: "Long",
+        isId: true,
+      };
+    
+      return {
+        name: entity.name,
+        namePlural: entity.name + "s", // or use a pluralization lib
+        nameLowercase: entity.name.toLowerCase(),
+        fields: cleanedFields,
+        idField: idField,
+      };
+    });
+    
+
     // Simulate loading
     await new Promise((resolve) => setTimeout(resolve, 2000));
 
     const finalJson = {
       projectName: projectData.projectName,
-      packageName: projectData.packageName,
-      javaVersion: projectData.javaVersion,
-      buildTool: projectData.buildTool.toLowerCase(),
       groupId: projectData.groupId,
       artifactId: projectData.artifactId,
-      version: projectData.version,
-      description: projectData.description,
-      database,
+      packageName: projectData.packageName,
+      javaVersion: projectData.javaVersion,
+      springBootVersion: projectData.version,
       dependencies: selectedDependencies,
-      entities: entities
-        .filter((e) => e.name.trim() !== "")
-        .map((e) => ({
-          name: e.name,
-          fields: e.fields.filter((f) => f.name.trim() !== ""),
-        })),
-      includeDocker: projectData.includeDocker,
-      includeSwagger: projectData.includeSwagger,
-      includeGitlabCI: projectData.includeGitlabCI,
+      outputDir: "./generated-projects",
+      buildTool: projectData.buildTool.toLowerCase(),
+      entities: cleanedEntities,
+      includesDocker: projectData.includeDocker,
+      includesSwagger: projectData.includeSwagger,
+      includesGitlab: projectData.includeGitlabCI,
+      includesGit: projectData.includeGit,
+      includesTests: projectData.includeTests,
+      databaseConfig: database,
+      githubRemoteUrl: projectData.gitUrl ?? "",
+      isSupportingAI: projectData.includeAI,
+      entitiesDescription: projectData.description
     };
 
     setGeneratedJson(JSON.stringify(finalJson, null, 2));
@@ -137,7 +169,12 @@ export default function SpringConfigurator() {
         );
       case 1:
         return (
-          <EntitiesDesigner entities={entities} setEntities={setEntities} />
+          <EntitiesDesigner 
+            entities={entities} 
+            setEntities={setEntities} 
+            projectData={projectData}
+            setProjectData={setProjectData}
+          />
         );
       case 2:
         return (

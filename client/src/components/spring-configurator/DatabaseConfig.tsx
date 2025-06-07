@@ -5,7 +5,7 @@ interface DatabaseConfigProps {
   setDatabase: (database: DatabaseConfig) => void;
 }
 
-const databaseTypes = ["H2", "MySQL", "PostgreSQL", "Oracle", "SQL Server", "MariaDB"];
+const databaseTypes = ["H2", "MYSQL", "POSTGRESQL", "ORACLE", "MARIADB"];
 
 export default function DatabaseConfigComponent({ database, setDatabase }: DatabaseConfigProps) {
   const updateDatabase = (field: keyof DatabaseConfig, value: string) => {
@@ -14,8 +14,6 @@ export default function DatabaseConfigComponent({ database, setDatabase }: Datab
 
   return (
     <div>
-      <h2 className="mb-3">Database Configuration</h2>
-
       <div className="form-group">
         <label>Database Type</label>
         <select
